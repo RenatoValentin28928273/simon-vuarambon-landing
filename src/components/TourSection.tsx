@@ -164,7 +164,7 @@ const TourSection = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="flex items-baseline justify-between mb-10"
+            className="flex items-baseline justify-between mb-14"
           >
             <AnimatedHeading
               text="Tour"
@@ -181,11 +181,11 @@ const TourSection = () => {
               <div className="relative overflow-hidden select-none" style={{ height: wheelH }}>
                 <div
                   className="absolute inset-x-0 top-0 z-10 pointer-events-none"
-                  style={{ height: 3 * ITEM_H, background: "linear-gradient(to bottom, hsl(var(--background)) 5%, transparent 100%)" }}
+                  style={{ height: 3 * ITEM_H, background: "linear-gradient(to bottom, black 5%, transparent 100%)" }}
                 />
                 <div
                   className="absolute inset-x-0 bottom-0 z-10 pointer-events-none"
-                  style={{ height: 3 * ITEM_H, background: "linear-gradient(to top, hsl(var(--background)) 5%, transparent 100%)" }}
+                  style={{ height: 3 * ITEM_H, background: "linear-gradient(to top, black 5%, transparent 100%)" }}
                 />
                 <motion.div
                   animate={{ y: listY }}
@@ -231,7 +231,8 @@ const TourSection = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="glass-card rounded-[10px] border border-white/10 outline outline-1 outline-white/[0.06] p-6 flex flex-col gap-4 shrink-0 w-[360px]"
+                className="rounded-[10px] border border-white/15 p-6 flex flex-col gap-4 shrink-0 w-[360px]"
+                style={{ background: "rgba(255,255,255,0.07)", backdropFilter: "blur(20px)" }}
               >
                 <span className="font-mono text-xs tracking-[0.3em] uppercase text-primary">
                   {current.date}
