@@ -51,7 +51,7 @@ const TourMap = ({ city }: { city: string }) => {
 
     const map = L.map(containerRef.current, {
       center: coords,
-      zoom: 12,
+      zoom: 9,
       zoomControl: false,
       scrollWheelZoom: false,
       dragging: false,
@@ -88,7 +88,7 @@ const TourMap = ({ city }: { city: string }) => {
   useEffect(() => {
     if (!mapRef.current || !markerRef.current) return;
     const coords = COORDS[city] ?? [0, 0];
-    mapRef.current.flyTo(coords, 12, { duration: 0.75, easeLinearity: 0.25 });
+    mapRef.current.flyTo(coords, 9, { duration: 0.75, easeLinearity: 0.25 });
     markerRef.current.setLatLng(coords);
   }, [city]);
 
@@ -97,9 +97,9 @@ const TourMap = ({ city }: { city: string }) => {
       ref={containerRef}
       className="w-full rounded-md overflow-hidden"
       style={{
-        height: 170,
-        // Dark monochrome: grayscale → invert → darken
-        filter: "grayscale(100%) invert(88%) contrast(90%) brightness(75%)",
+        height: 200,
+        // Blueprint style: grayscale → full invert → boost contrast
+        filter: "grayscale(100%) invert(100%) contrast(140%) brightness(65%)",
         pointerEvents: "none",
       }}
     />
