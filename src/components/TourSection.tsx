@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, Suspense, lazy } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import AnimatedHeading from "@/components/AnimatedHeading";
-import SmokeBackground from "@/components/SmokeBackground";
 
 const TourMap = lazy(() => import("@/components/TourMap"));
 const IS_MOBILE = typeof window !== "undefined" && window.innerWidth < 768;
@@ -152,7 +151,7 @@ const TourSection = () => {
       <section
         id="tour"
         ref={sectionRef}
-        className="hidden md:flex flex-col justify-center px-12 bg-black"
+        className="relative hidden md:flex flex-col justify-center px-12 bg-black"
         style={{ height: "100vh" }}
       >
         <div className="container mx-auto max-w-6xl">
@@ -293,17 +292,6 @@ const TourSection = () => {
             ))}
           </div>
 
-          {/* Scroll hint */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-none flex flex-col items-center gap-2">
-            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-foreground/30">
-              {activeIndex < tourDates.length - 1 ? "scroll" : "continue"}
-            </span>
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="w-px h-6 bg-muted-foreground/30"
-            />
-          </div>
         </div>
       </section>
     </>
