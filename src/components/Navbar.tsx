@@ -5,6 +5,7 @@ const navItems = [
   { label: "Tour", href: "#tour" },
   { label: "Music", href: "#music" },
   { label: "About", href: "#about" },
+  { label: "Presskit", href: "#presskit" },
   { label: "Contact", href: "#contact" },
 ];
 
