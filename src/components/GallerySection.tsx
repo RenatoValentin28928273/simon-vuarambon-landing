@@ -70,9 +70,10 @@ const GallerySection = () => {
           style={{ y: headingY }}
           className="flex items-baseline justify-between mb-16"
         >
-          <h2 className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground">
-            Gallery
-          </h2>
+          <AnimatedHeading
+            text="Gallery"
+            className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground"
+          />
           <span className="font-mono text-xs text-muted-foreground tracking-[0.2em] uppercase">
             Photos & Videos
           </span>
