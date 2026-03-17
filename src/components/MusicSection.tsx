@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import releaseCover from "@/assets/release-cover.jpg";
+import InteractiveBackground from "@/components/InteractiveBackground";
 
 const releases = [
   { title: "The Night Mail (Simon Vuarambon Remix)", artist: "New Jackson", label: "Bedrock Records", year: "2026" },
@@ -17,8 +18,11 @@ const platforms = [
 
 const MusicSection = () => {
   return (
-    <section id="music" className="py-[15vh] px-6 md:px-12">
-      <div className="container mx-auto max-w-5xl">
+    <section id="music" className="relative py-[15vh] px-6 md:px-12 overflow-hidden">
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <InteractiveBackground />
+      </div>
+      <div className="relative z-10 container mx-auto max-w-5xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
           {/* Left: featured release */}
           <motion.div
