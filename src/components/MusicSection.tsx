@@ -85,8 +85,6 @@ const MusicSection = () => {
               text="Music"
               className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground mb-12"
             />
-              Music
-            </motion.h2>
 
             <motion.div style={{ y: listY }}>
               {releases.map((release, i) => (
