@@ -44,8 +44,7 @@ const AboutSection = () => {
               text="About"
               className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground mb-10"
             />
-              About
-            
+
 
             <motion.div
               initial={{ opacity: 0, y: 30 }}
