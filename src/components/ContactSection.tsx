@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import InteractiveBackground from "@/components/InteractiveBackground";
+import AnimatedHeading from "@/components/AnimatedHeading";
 
 const socials = [
   { name: "Instagram", url: "https://www.instagram.com/simonvuarambon/" },
