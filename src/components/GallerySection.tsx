@@ -1,6 +1,7 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Play } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
 import AnimatedHeading from "@/components/AnimatedHeading";
 
 import gallery1 from "@/assets/gallery-1.jpg";
@@ -30,19 +31,37 @@ const media: MediaItem[] = [
 
 const GallerySection = () => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: "center",
+    skipSnaps: false,
+  });
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
 
   const headingY = useTransform(scrollYProgress, [0, 1], [20, -25]);
-  const gridY = useTransform(scrollYProgress, [0, 1], [15, -8]);
+
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    emblaApi.on("select", onSelect);
+    onSelect();
+    return () => { emblaApi.off("select", onSelect); };
+  }, [emblaApi]);
 
   const openLightbox = (index: number) => setLightboxIndex(index);
   const closeLightbox = () => setLightboxIndex(null);
 
-  const navigate = useCallback(
+  const navigateLightbox = useCallback(
     (dir: -1 | 1) => {
       if (lightboxIndex === null) return;
       setLightboxIndex((lightboxIndex + dir + media.length) % media.length);
@@ -53,15 +72,15 @@ const GallerySection = () => {
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === "Escape") closeLightbox();
-      if (e.key === "ArrowLeft") navigate(-1);
-      if (e.key === "ArrowRight") navigate(1);
+      if (e.key === "ArrowLeft") navigateLightbox(-1);
+      if (e.key === "ArrowRight") navigateLightbox(1);
     },
-    [navigate]
+    [navigateLightbox]
   );
 
   return (
-    <section ref={sectionRef} id="gallery" className="py-[15vh] px-6 md:px-12">
-      <div className="container mx-auto max-w-6xl">
+    <section ref={sectionRef} id="gallery" className="py-[15vh] overflow-hidden">
+      <div className="container mx-auto max-w-6xl px-6 md:px-12">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -78,44 +97,110 @@ const GallerySection = () => {
             Photos & Videos
           </span>
         </motion.div>
-
-        {/* Masonry-style grid with parallax */}
-        <motion.div style={{ y: gridY }} className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-          {media.map((item, i) => (
-            <motion.button
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: i * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              onClick={() => openLightbox(i)}
-              className={`group relative overflow-hidden cursor-pointer ${
-                item.aspect === "portrait" ? "row-span-2" : ""
-              }`}
-            >
-              <motion.img
-                src={item.src}
-                alt={item.alt}
-                className="w-full h-full object-cover"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              />
-
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-background/0 group-hover:bg-background/60 transition-all duration-500 flex flex-col items-center justify-center">
-                {item.type === "video" && (
-                  <div className="w-12 h-12 border border-foreground/30 rounded-full flex items-center justify-center opacity-80 group-hover:opacity-100 group-hover:border-primary/60 transition-all duration-500">
-                    <Play className="w-5 h-5 text-foreground ml-0.5" />
-                  </div>
-                )}
-                <span className="font-mono text-xs text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-500 mt-3 tracking-[0.1em] uppercase px-4 text-center">
-                  {item.caption}
-                </span>
-              </div>
-            </motion.button>
-          ))}
-        </motion.div>
       </div>
+
+      {/* Carousel */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <div ref={emblaRef} className="overflow-hidden">
+          <div className="flex gap-4 md:gap-6">
+            {media.map((item, i) => {
+              const isActive = i === selectedIndex;
+              return (
+                <motion.div
+                  key={i}
+                  animate={{
+                    scale: isActive ? 1 : 0.88,
+                    opacity: isActive ? 1 : 0.45,
+                  }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  className="relative flex-[0_0_80%] md:flex-[0_0_55%] lg:flex-[0_0_45%] cursor-pointer group"
+                  style={{ minWidth: 0 }}
+                  onClick={() => openLightbox(i)}
+                >
+                  <div className="relative overflow-hidden aspect-[16/10]">
+                    <motion.img
+                      src={item.src}
+                      alt={item.alt}
+                      className="w-full h-full object-cover"
+                      whileHover={{ scale: 1.04 }}
+                      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    />
+
+                    {/* Overlay */}
+                    <div className="absolute inset-0 bg-background/0 group-hover:bg-background/55 transition-all duration-500 flex flex-col items-center justify-center">
+                      {item.type === "video" && (
+                        <div className="w-12 h-12 border border-foreground/30 rounded-full flex items-center justify-center opacity-80 group-hover:opacity-100 group-hover:border-primary/60 transition-all duration-500">
+                          <Play className="w-5 h-5 text-foreground ml-0.5" />
+                        </div>
+                      )}
+                      <span className="font-mono text-xs text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-500 mt-3 tracking-[0.1em] uppercase px-4 text-center">
+                        {item.caption}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Caption below active slide */}
+                  <AnimatePresence>
+                    {isActive && (
+                      <motion.p
+                        key="caption"
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 6 }}
+                        transition={{ duration: 0.35 }}
+                        className="font-mono text-xs text-muted-foreground tracking-[0.15em] uppercase mt-4 text-center"
+                      >
+                        {item.caption}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div className="flex items-center justify-center gap-6 mt-10">
+          <button
+            onClick={scrollPrev}
+            className="w-10 h-10 flex items-center justify-center border border-foreground/10 rounded-sm hover:border-primary/50 transition-colors duration-300"
+          >
+            <ChevronLeft className="w-5 h-5 text-foreground" />
+          </button>
+
+          {/* Dots */}
+          <div className="flex gap-2">
+            {media.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => emblaApi?.scrollTo(i)}
+                className="transition-all duration-300"
+              >
+                <span
+                  className={`block rounded-full transition-all duration-300 ${
+                    i === selectedIndex
+                      ? "w-4 h-1 bg-foreground"
+                      : "w-1 h-1 bg-foreground/30"
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={scrollNext}
+            className="w-10 h-10 flex items-center justify-center border border-foreground/10 rounded-sm hover:border-primary/50 transition-colors duration-300"
+          >
+            <ChevronRight className="w-5 h-5 text-foreground" />
+          </button>
+        </div>
+      </motion.div>
 
       {/* Lightbox */}
       <AnimatePresence>
@@ -141,14 +226,14 @@ const GallerySection = () => {
             </button>
 
             <button
-              onClick={(e) => { e.stopPropagation(); navigate(-1); }}
+              onClick={(e) => { e.stopPropagation(); navigateLightbox(-1); }}
               className="absolute left-4 md:left-8 z-10 w-10 h-10 flex items-center justify-center border border-foreground/10 rounded-sm hover:border-primary/40 transition-colors duration-300"
             >
               <ChevronLeft className="w-5 h-5 text-foreground" />
             </button>
 
             <button
-              onClick={(e) => { e.stopPropagation(); navigate(1); }}
+              onClick={(e) => { e.stopPropagation(); navigateLightbox(1); }}
               className="absolute right-4 md:right-8 z-10 w-10 h-10 flex items-center justify-center border border-foreground/10 rounded-sm hover:border-primary/40 transition-colors duration-300"
             >
               <ChevronRight className="w-5 h-5 text-foreground" />
