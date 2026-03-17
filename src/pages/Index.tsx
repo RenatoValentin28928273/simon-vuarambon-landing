@@ -10,6 +10,7 @@ import PresskitSection from "@/components/PresskitSection";
 import ContactSection from "@/components/ContactSection";
 import SectionDivider from "@/components/SectionDivider";
 import Footer from "@/components/Footer";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const Index = () => {
   return (
@@ -18,18 +19,36 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <SectionDivider />
-      <TourSection />
-      <MarqueeSection />
-      <MusicSection />
+      <ScrollReveal>
+        <TourSection />
+      </ScrollReveal>
+      <ScrollReveal delay={0.05}>
+        <MarqueeSection />
+      </ScrollReveal>
+      <ScrollReveal>
+        <MusicSection />
+      </ScrollReveal>
       <SectionDivider />
-      <AboutSection />
+      <ScrollReveal>
+        <AboutSection />
+      </ScrollReveal>
       <SectionDivider />
-      <GallerySection />
-      <MarqueeSection />
-      <PresskitSection />
+      <ScrollReveal>
+        <GallerySection />
+      </ScrollReveal>
+      <ScrollReveal delay={0.05}>
+        <MarqueeSection />
+      </ScrollReveal>
+      <ScrollReveal>
+        <PresskitSection />
+      </ScrollReveal>
       <SectionDivider />
-      <ContactSection />
-      <Footer />
+      <ScrollReveal>
+        <ContactSection />
+      </ScrollReveal>
+      <ScrollReveal delay={0.1}>
+        <Footer />
+      </ScrollReveal>
     </div>
   );
 };
