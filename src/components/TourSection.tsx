@@ -43,7 +43,7 @@ const TourItem = ({
         scale,
         opacity,
         height: ITEM_HEIGHT,
-        fontSize: "clamp(1.8rem, 5vw, 3.5rem)",
+        fontSize: "clamp(1.4rem, 3.5vw, 2.8rem)",
         color: "hsl(var(--foreground))",
         display: "flex",
         alignItems: "center",
@@ -181,7 +181,7 @@ const TourSection = () => {
               <span className="font-mono text-xs text-muted-foreground tracking-[0.2em] uppercase">2026</span>
             </motion.div>
 
-            <div className="flex flex-row items-center gap-20">
+            <div className="flex flex-row items-center justify-center gap-16 xl:gap-24">
               {/* Drum wheel */}
               <div className="flex-shrink-0">
                 <div
