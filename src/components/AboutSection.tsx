@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import portrait from "@/assets/simon-portrait.jpg";
 import InteractiveBackground from "@/components/InteractiveBackground";
+import AnimatedHeading from "@/components/AnimatedHeading";
 
 const AboutSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
