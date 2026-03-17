@@ -16,7 +16,7 @@ const ContactSection = () => {
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <InteractiveBackground />
       </div>
-      <div className="container mx-auto max-w-5xl">
+      <div className="relative z-10 container mx-auto max-w-5xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
