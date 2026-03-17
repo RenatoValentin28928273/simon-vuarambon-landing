@@ -279,6 +279,22 @@ const TourSection = () => {
             </AnimatePresence>
           </div>
 
+          {/* Scroll hint */}
+          <motion.div
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 pointer-events-none"
+            animate={{ opacity: activeIndex < tourDates.length - 1 ? 1 : 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-foreground/35">scroll</span>
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              className="flex flex-col items-center gap-1"
+            >
+              <div className="w-px h-8 bg-gradient-to-b from-foreground/40 to-transparent" />
+            </motion.div>
+          </motion.div>
+
           {/* Progress dots */}
           <div className="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col gap-2">
             {tourDates.map((_, i) => (
