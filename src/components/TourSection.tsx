@@ -98,7 +98,6 @@ const TourSection = () => {
     <>
       {/* ── Mobile: card list ── */}
       <section id="tour" className="relative md:hidden py-[12vh] px-6 overflow-hidden">
-        <SmokeBackground />
         <div className="container mx-auto max-w-5xl">
           <div className="flex items-baseline justify-between mb-10">
             <AnimatedHeading
