@@ -1,18 +1,14 @@
 import { motion } from "framer-motion";
-import heroBg from "@/assets/hero-bg.jpg";
+import InteractiveBackground from "@/components/InteractiveBackground";
 
 const HeroSection = () => {
   return (
     <section className="relative h-screen flex items-end overflow-hidden">
-      {/* Background image */}
+      {/* Interactive animated background */}
       <div className="absolute inset-0">
-        <img
-          src={heroBg}
-          alt="Simon Vuarambon performing"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/20" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/40 to-transparent" />
+        <InteractiveBackground />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/50 to-transparent" />
       </div>
 
       {/* Content */}
