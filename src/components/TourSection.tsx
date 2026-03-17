@@ -152,10 +152,8 @@ const TourSection = () => {
       <section
         id="tour"
         ref={sectionRef}
-        className="relative hidden md:flex flex-col justify-center px-12 overflow-hidden bg-black"
+        className="hidden md:flex flex-col justify-center px-12 bg-black"
         style={{ height: "100vh" }}
-      >
-        <SmokeBackground />
 
         <div className="container mx-auto max-w-6xl">
           {/* Header */}
@@ -178,15 +176,14 @@ const TourSection = () => {
 
             {/* Left: drum wheel */}
             <div className="flex-1 min-w-0 flex justify-center">
-              <div className="relative overflow-hidden select-none w-full max-w-lg" style={{ height: wheelH }}>
-                {/* Fade only the outer edges */}
+              <div className="relative select-none w-full max-w-lg" style={{ height: wheelH }}>
                 <div
                   className="absolute inset-x-0 top-0 z-10 pointer-events-none"
-                  style={{ height: ITEM_H, background: "linear-gradient(to bottom, black, transparent)" }}
+                  style={{ height: ITEM_H * 1.5, background: "linear-gradient(to bottom, black 40%, transparent)" }}
                 />
                 <div
                   className="absolute inset-x-0 bottom-0 z-10 pointer-events-none"
-                  style={{ height: ITEM_H, background: "linear-gradient(to top, black, transparent)" }}
+                  style={{ height: ITEM_H * 1.5, background: "linear-gradient(to top, black 40%, transparent)" }}
                 />
                 <motion.div
                   initial={{ y: listY }}
