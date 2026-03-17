@@ -5,6 +5,7 @@ import {
 } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import AnimatedHeading from "@/components/AnimatedHeading";
+import TourMap from "@/components/TourMap";
 
 const tourDates = [
   { date: "MAR 28", city: "Buenos Aires", country: "AR", venue: "Dahaus, Palacio Alsina", status: "tickets" },
@@ -224,6 +225,10 @@ const TourSection = () => {
                   <p className="font-mono text-sm text-foreground/70 tracking-[0.1em] uppercase">
                     {active.venue}
                   </p>
+
+                  {/* Map */}
+                  <TourMap city={active.city} />
+
                   <div className="mt-1 pt-4 border-t border-white/8">
                     {active.status === "sold out" ? (
                       <span className="inline-block font-mono text-xs text-foreground/60 tracking-[0.15em] uppercase border border-white/15 rounded px-3 py-1.5">

@@ -113,6 +113,13 @@ html {
   width: 100%;
 }
 
+/* Tour map pin pulse */
+@keyframes tourPulse {
+  0%   { transform: scale(0.8); opacity: 0.7; }
+  70%  { transform: scale(1.8); opacity: 0; }
+  100% { transform: scale(0.8); opacity: 0; }
+}
+
 /* Glass card */
 .glass-card {
   background: hsl(var(--glass-bg));
