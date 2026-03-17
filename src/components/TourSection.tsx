@@ -44,9 +44,10 @@ const TourSection = () => {
           style={{ y: headingY }}
           className="flex items-baseline justify-between mb-16"
         >
-          <h2 className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground">
-            Tour
-          </h2>
+          <AnimatedHeading
+            text="Tour"
+            className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground"
+          />
           <span className="font-mono text-xs text-muted-foreground tracking-[0.2em] uppercase">
             2026
           </span>
