@@ -281,17 +281,22 @@ const TourSection = () => {
 
           {/* Scroll hint */}
           <motion.div
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 pointer-events-none"
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
             animate={{ opacity: activeIndex < tourDates.length - 1 ? 1 : 0 }}
             transition={{ duration: 0.5 }}
           >
-            <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-foreground/35">scroll</span>
+            <motion.span
+              animate={{ opacity: [0.4, 0.7, 0.4] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+              className="font-mono text-[11px] tracking-[0.4em] uppercase text-foreground/60"
+            >
+              Scroll
+            </motion.span>
             <motion.div
               animate={{ y: [0, 10, 0] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-              className="flex flex-col items-center gap-1"
             >
-              <div className="w-px h-8 bg-gradient-to-b from-foreground/40 to-transparent" />
+              <div className="w-px h-10 bg-gradient-to-b from-foreground/50 to-transparent mx-auto" />
             </motion.div>
           </motion.div>
 
