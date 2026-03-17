@@ -20,8 +20,8 @@ const tourDates = [
 
 const ITEM_H      = 88;
 const VISIBLE     = 7;
-// 18vh per city → 7 × 18 = 126vh total (≈ 1.3 screen-heights of scroll)
-const VH_PER_ITEM = 18;
+// 28vh per city → 7 × 28 = 196vh total (≈ 2 screen-heights of scroll)
+const VH_PER_ITEM = 28;
 
 const TourSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
