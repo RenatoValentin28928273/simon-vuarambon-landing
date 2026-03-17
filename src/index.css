@@ -175,8 +175,8 @@ body {
 .smoke-blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(90px);
-  background: radial-gradient(ellipse at center, rgba(255,255,255,0.055) 0%, transparent 68%);
+  filter: blur(65px);
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.13) 0%, transparent 68%);
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
