@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect, Suspense, lazy } from "react";
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import AnimatedHeading from "@/components/AnimatedHeading";
 import SmokeBackground from "@/components/SmokeBackground";
 
-// Lazy-load Leaflet — isolates crashes, never loads on mobile
 const TourMap = lazy(() => import("@/components/TourMap"));
 const IS_MOBILE = typeof window !== "undefined" && window.innerWidth < 768;
 
@@ -18,32 +17,81 @@ const tourDates = [
   { date: "JUL 19", city: "Córdoba",      country: "AR", venue: "Club Paraguay",           status: "tickets" },
 ];
 
-const ITEM_H      = 88;
-const VISIBLE     = 7;
-// 28vh per city → 7 × 28 = 196vh total (≈ 2 screen-heights of scroll)
-const VH_PER_ITEM = 28;
+const ITEM_H  = 88;
+const VISIBLE = 7;
 
 const TourSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const outerRef = useRef<HTMLDivElement>(null);
+  const sectionRef  = useRef<HTMLElement>(null);
+  const isLockedRef = useRef(false);
+  const cooldownRef = useRef(false);
+  const activeRef   = useRef(activeIndex);
+  activeRef.current = activeIndex;
 
-  const { scrollYProgress } = useScroll({
-    target: outerRef,
-    offset: ["start start", "end end"],
-  });
-  const smooth    = useSpring(scrollYProgress, { stiffness: 60, damping: 20, restDelta: 0.001 });
-  const fractional = useTransform(smooth, [0, 1], [0, tourDates.length - 1]);
-
+  /* ── Lock scroll when section is ≥85% visible (desktop only) ── */
   useEffect(() => {
-    return fractional.on("change", (fi) =>
-      setActiveIndex(Math.min(Math.max(Math.round(fi), 0), tourDates.length - 1))
+    if (IS_MOBILE) return;
+
+    const obs = new IntersectionObserver(
+      ([entry]) => { isLockedRef.current = entry.intersectionRatio >= 0.85; },
+      { threshold: [0, 0.85, 1] }
     );
-  }, [fractional]);
+    if (sectionRef.current) obs.observe(sectionRef.current);
+    return () => obs.disconnect();
+  }, []);
 
-  const half   = Math.floor(VISIBLE / 2);
-  const wheelH = VISIBLE * ITEM_H;
-  const listY  = useTransform(fractional, (fi) => (half - fi) * ITEM_H);
+  /* ── Wheel event interception ── */
+  useEffect(() => {
+    if (IS_MOBILE) return;
 
+    const onWheel = (e: WheelEvent) => {
+      if (!isLockedRef.current) return;
+
+      const goingDown = e.deltaY > 0;
+      const cur = activeRef.current;
+
+      // At boundaries → let scroll pass through naturally
+      if (goingDown && cur >= tourDates.length - 1) return;
+      if (!goingDown && cur <= 0) return;
+
+      // Trap the scroll
+      e.preventDefault();
+      if (cooldownRef.current) return;
+      cooldownRef.current = true;
+      setTimeout(() => { cooldownRef.current = false; }, 700);
+
+      setActiveIndex(prev =>
+        goingDown
+          ? Math.min(prev + 1, tourDates.length - 1)
+          : Math.max(prev - 1, 0)
+      );
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => window.removeEventListener("wheel", onWheel);
+  }, []);
+
+  /* ── Keyboard navigation ── */
+  useEffect(() => {
+    if (IS_MOBILE) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (!isLockedRef.current) return;
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setActiveIndex(i => Math.min(i + 1, tourDates.length - 1));
+      }
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setActiveIndex(i => Math.max(i - 1, 0));
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const half    = Math.floor(VISIBLE / 2);
+  const wheelH  = VISIBLE * ITEM_H;
+  const listY   = (half - activeIndex) * ITEM_H;
   const current = tourDates[activeIndex];
 
   return (
@@ -101,144 +149,159 @@ const TourSection = () => {
         </div>
       </section>
 
-      {/* ── Desktop: scroll-driven drum wheel ── */}
-      <div
-        ref={outerRef}
-        style={{ height: `${tourDates.length * VH_PER_ITEM}vh` }}
-        className="hidden md:block"
+      {/* ── Desktop: full-screen trapped section ── */}
+      <section
+        id="tour"
+        ref={sectionRef}
+        className="relative hidden md:flex flex-col justify-center px-12 overflow-hidden"
+        style={{ height: "100vh" }}
       >
-        <section className="sticky top-0 h-screen flex flex-col justify-center px-12 overflow-hidden pb-[8vh]">
-          <SmokeBackground />
+        <SmokeBackground />
 
-          <div className="container mx-auto max-w-6xl">
-            {/* Header */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="flex items-baseline justify-between mb-10"
-            >
-              <AnimatedHeading
-                text="Tour"
-                className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground"
-              />
-              <span className="font-mono text-xs text-muted-foreground tracking-[0.2em] uppercase">2026</span>
-            </motion.div>
+        <div className="container mx-auto max-w-6xl">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="flex items-baseline justify-between mb-10"
+          >
+            <AnimatedHeading
+              text="Tour"
+              className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground"
+            />
+            <span className="font-mono text-xs text-muted-foreground tracking-[0.2em] uppercase">2026</span>
+          </motion.div>
 
-            {/* Drum wheel + detail card side by side */}
-            <div className="flex flex-row items-center gap-12 xl:gap-20">
+          {/* Drum wheel + detail card */}
+          <div className="flex flex-row items-center gap-12 xl:gap-20">
 
-              {/* Left: drum wheel */}
-              <div className="flex-1 min-w-0">
-                <div className="relative overflow-hidden select-none" style={{ height: wheelH }}>
-                  <div
-                    className="absolute inset-x-0 top-0 z-10 pointer-events-none"
-                    style={{ height: 3 * ITEM_H, background: "linear-gradient(to bottom, hsl(var(--background)) 5%, transparent 100%)" }}
-                  />
-                  <div
-                    className="absolute inset-x-0 bottom-0 z-10 pointer-events-none"
-                    style={{ height: 3 * ITEM_H, background: "linear-gradient(to top, hsl(var(--background)) 5%, transparent 100%)" }}
-                  />
-                  <motion.div style={{ y: listY }}>
-                    {tourDates.map((tour, i) => {
-                      const dist = Math.abs(i - activeIndex);
-                      return (
-                        <motion.div
-                          key={i}
-                          animate={{
-                            opacity: Math.max(0.04, 1 - dist * 0.28),
-                            scale:   Math.max(0.52, 1 - dist * 0.14),
-                          }}
-                          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                          className="flex items-center"
-                          style={{ height: ITEM_H }}
-                        >
-                          <span
-                            style={{
-                              fontFamily:    "var(--font-serif)",
-                              fontStyle:     "italic",
-                              fontWeight:    i === activeIndex ? 700 : 400,
-                              fontSize:      "clamp(1.8rem, 4.5vw, 4rem)",
-                              letterSpacing: "-0.03em",
-                              textTransform: "uppercase",
-                              color:         "hsl(var(--foreground))",
-                              lineHeight:    1,
-                            }}
-                          >
-                            {tour.city}
-                          </span>
-                        </motion.div>
-                      );
-                    })}
-                  </motion.div>
-                </div>
-              </div>
-
-              {/* Right: detail card with map */}
-              <AnimatePresence mode="wait">
+            {/* Left: drum wheel */}
+            <div className="flex-1 min-w-0">
+              <div className="relative overflow-hidden select-none" style={{ height: wheelH }}>
+                <div
+                  className="absolute inset-x-0 top-0 z-10 pointer-events-none"
+                  style={{ height: 3 * ITEM_H, background: "linear-gradient(to bottom, hsl(var(--background)) 5%, transparent 100%)" }}
+                />
+                <div
+                  className="absolute inset-x-0 bottom-0 z-10 pointer-events-none"
+                  style={{ height: 3 * ITEM_H, background: "linear-gradient(to top, hsl(var(--background)) 5%, transparent 100%)" }}
+                />
                 <motion.div
-                  key={activeIndex}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  className="glass-card rounded-[10px] border border-white/10 outline outline-1 outline-white/[0.06] p-6 flex flex-col gap-4 shrink-0 w-[360px]"
+                  animate={{ y: listY }}
+                  transition={{ type: "spring", stiffness: 220, damping: 28 }}
                 >
-                  <span className="font-mono text-xs tracking-[0.3em] uppercase text-primary">
-                    {current.date}
-                  </span>
-                  <div>
-                    <h3 className="font-serif italic text-4xl tracking-[-0.03em] text-foreground leading-tight">
-                      {current.city}
-                    </h3>
-                    <span className="font-mono text-xs text-foreground/50 tracking-[0.15em] uppercase">
-                      {current.country}
-                    </span>
-                  </div>
-                  <p className="font-mono text-sm text-foreground/80 tracking-[0.08em] uppercase">
-                    {current.venue}
-                  </p>
-
-                  {/* Map */}
-                  {!IS_MOBILE && (
-                    <Suspense fallback={<div style={{ height: 180 }} className="w-full rounded-md bg-white/5 animate-pulse" />}>
-                      <TourMap city={current.city} />
-                    </Suspense>
-                  )}
-
-                  <div className="pt-3 border-t border-white/8">
-                    {current.status === "sold out" ? (
-                      <span className="inline-block font-mono text-xs text-foreground/50 tracking-[0.15em] uppercase border border-white/15 rounded px-3 py-1.5">
-                        Sold out
-                      </span>
-                    ) : (
-                      <a
-                        href="#"
-                        className="inline-flex items-center gap-2 font-mono text-xs tracking-[0.2em] uppercase text-foreground border-b border-foreground/30 pb-1 hover:border-primary hover:text-primary transition-colors duration-300"
+                  {tourDates.map((tour, i) => {
+                    const dist = Math.abs(i - activeIndex);
+                    return (
+                      <motion.div
+                        key={i}
+                        animate={{
+                          opacity: Math.max(0.04, 1 - dist * 0.28),
+                          scale:   Math.max(0.52, 1 - dist * 0.14),
+                        }}
+                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                        className="flex items-center"
+                        style={{ height: ITEM_H }}
                       >
-                        Get tickets <ArrowUpRight className="w-3 h-3" />
-                      </a>
-                    )}
-                  </div>
-                  <p className="font-mono text-[10px] text-foreground/30 tracking-[0.15em]">
-                    {activeIndex + 1} / {tourDates.length}
-                  </p>
+                        <span style={{
+                          fontFamily:    "var(--font-serif)",
+                          fontStyle:     "italic",
+                          fontWeight:    i === activeIndex ? 700 : 400,
+                          fontSize:      "clamp(1.8rem, 4.5vw, 4rem)",
+                          letterSpacing: "-0.03em",
+                          textTransform: "uppercase",
+                          color:         "hsl(var(--foreground))",
+                          lineHeight:    1,
+                        }}>
+                          {tour.city}
+                        </span>
+                      </motion.div>
+                    );
+                  })}
                 </motion.div>
-              </AnimatePresence>
+              </div>
             </div>
+
+            {/* Right: detail card */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndex}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="glass-card rounded-[10px] border border-white/10 outline outline-1 outline-white/[0.06] p-6 flex flex-col gap-4 shrink-0 w-[360px]"
+              >
+                <span className="font-mono text-xs tracking-[0.3em] uppercase text-primary">
+                  {current.date}
+                </span>
+                <div>
+                  <h3 className="font-serif italic text-4xl tracking-[-0.03em] text-foreground leading-tight">
+                    {current.city}
+                  </h3>
+                  <span className="font-mono text-xs text-foreground/50 tracking-[0.15em] uppercase">
+                    {current.country}
+                  </span>
+                </div>
+                <p className="font-mono text-sm text-foreground/80 tracking-[0.08em] uppercase">
+                  {current.venue}
+                </p>
+
+                {!IS_MOBILE && (
+                  <Suspense fallback={<div style={{ height: 180 }} className="w-full rounded-md bg-white/5 animate-pulse" />}>
+                    <TourMap city={current.city} />
+                  </Suspense>
+                )}
+
+                <div className="pt-3 border-t border-white/8">
+                  {current.status === "sold out" ? (
+                    <span className="inline-block font-mono text-xs text-foreground/50 tracking-[0.15em] uppercase border border-white/15 rounded px-3 py-1.5">
+                      Sold out
+                    </span>
+                  ) : (
+                    <a
+                      href="#"
+                      className="inline-flex items-center gap-2 font-mono text-xs tracking-[0.2em] uppercase text-foreground border-b border-foreground/30 pb-1 hover:border-primary hover:text-primary transition-colors duration-300"
+                    >
+                      Get tickets <ArrowUpRight className="w-3 h-3" />
+                    </a>
+                  )}
+                </div>
+                <p className="font-mono text-[10px] text-foreground/30 tracking-[0.15em]">
+                  {activeIndex + 1} / {tourDates.length}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Progress dots */}
+          <div className="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col gap-2">
+            {tourDates.map((_, i) => (
+              <motion.button
+                key={i}
+                onClick={() => setActiveIndex(i)}
+                animate={{ opacity: i === activeIndex ? 1 : 0.25, scale: i === activeIndex ? 1 : 0.7 }}
+                className="w-1.5 h-1.5 rounded-full bg-foreground"
+                aria-label={tourDates[i].city}
+              />
+            ))}
           </div>
 
           {/* Scroll hint */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-none">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-none flex flex-col items-center gap-2">
+            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-foreground/30">
+              {activeIndex < tourDates.length - 1 ? "scroll" : "continue"}
+            </span>
             <motion.div
               animate={{ y: [0, 8, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="w-px h-8 bg-muted-foreground/30 mx-auto"
+              className="w-px h-6 bg-muted-foreground/30"
             />
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </>
   );
 };
