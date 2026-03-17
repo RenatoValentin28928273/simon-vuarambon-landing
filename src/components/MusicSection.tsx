@@ -14,6 +14,7 @@ const releases = [
 const platforms = [
   { name: "Spotify", url: "https://open.spotify.com/intl-pt/artist/2W3M7XIkEKENCT1LXJ6mdj" },
   { name: "Apple Music", url: "https://music.apple.com/br/artist/simon-vuarambon/476557687" },
+  { name: "YouTube Music", url: "https://music.youtube.com/channel/UCoIgKB5Tjq7wmWD335ySL2A" },
   { name: "SoundCloud", url: "https://soundcloud.com/simonvuarambon" },
   { name: "Beatport", url: "https://www.beatport.com/pt/artist/simon-vuarambon/151290" },
 ];

@@ -6,6 +6,8 @@ import AnimatedHeading from "@/components/AnimatedHeading";
 const socials = [
   { name: "Instagram", url: "https://www.instagram.com/simonvuarambon/" },
   { name: "Facebook", url: "https://www.facebook.com/simonvuarambonmusic/" },
+  { name: "X / Twitter", url: "https://x.com/simonvuarambon" },
+  { name: "YouTube", url: "https://www.youtube.com/channel/UCGk8yrUHeOTvxd2AKTtTgrg" },
   { name: "SoundCloud", url: "https://soundcloud.com/simonvuarambon" },
   { name: "Spotify", url: "https://open.spotify.com/intl-pt/artist/2W3M7XIkEKENCT1LXJ6mdj" },
   { name: "Beatport", url: "https://www.beatport.com/pt/artist/simon-vuarambon/151290" },
