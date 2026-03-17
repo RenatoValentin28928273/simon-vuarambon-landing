@@ -154,7 +154,7 @@ const TourSection = () => {
         ref={sectionRef}
         className="hidden md:flex flex-col justify-center px-12 bg-black"
         style={{ height: "100vh" }}
-
+      >
         <div className="container mx-auto max-w-6xl">
           {/* Header */}
           <motion.div
