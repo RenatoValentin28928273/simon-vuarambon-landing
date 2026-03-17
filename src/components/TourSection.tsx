@@ -118,7 +118,7 @@ const TourSection = () => {
             />
             <span className="font-mono text-xs text-muted-foreground tracking-[0.2em] uppercase">2026</span>
           </div>
-          <div className="divide-y divide-foreground/5">
+          <div className="space-y-3">
             {tourDates.map((tour, i) => (
               <motion.div
                 key={i}
@@ -126,29 +126,29 @@ const TourSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.07, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="py-5 flex items-start justify-between gap-4"
+                className="glass-card rounded-[10px] border border-white/10 outline outline-1 outline-white/[0.06] px-5 py-4 flex items-center justify-between gap-4"
               >
                 <div className="flex-1 min-w-0">
                   <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-primary block mb-1">
                     {tour.date}
                   </span>
-                  <h4 className="font-serif italic text-2xl text-foreground leading-tight">
+                  <h4 className="font-serif italic text-xl text-foreground leading-tight">
                     {tour.city}
-                    <span className="text-muted-foreground text-base ml-2">{tour.country}</span>
+                    <span className="text-foreground/50 text-sm ml-2">{tour.country}</span>
                   </h4>
-                  <p className="font-mono text-xs text-muted-foreground mt-1 tracking-[0.08em] uppercase">
+                  <p className="font-mono text-xs text-foreground/60 mt-1 tracking-[0.08em] uppercase">
                     {tour.venue}
                   </p>
                 </div>
-                <div className="pt-1 shrink-0">
+                <div className="shrink-0">
                   {tour.status === "sold out" ? (
-                    <span className="font-mono text-[10px] text-muted-foreground/40 tracking-[0.15em] uppercase">
+                    <span className="inline-block font-mono text-[10px] text-foreground/55 tracking-[0.15em] uppercase border border-white/15 rounded px-2.5 py-1">
                       Sold out
                     </span>
                   ) : (
                     <a
                       href="#"
-                      className="inline-flex items-center gap-1 font-mono text-[10px] tracking-[0.15em] uppercase text-foreground border-b border-foreground/20 pb-0.5 hover:border-primary transition-colors duration-300"
+                      className="inline-flex items-center gap-1 font-mono text-[10px] tracking-[0.15em] uppercase text-foreground border-b border-foreground/30 pb-0.5 hover:border-primary hover:text-primary transition-colors duration-300"
                     >
                       Tickets <ArrowUpRight className="w-3 h-3" />
                     </a>
@@ -212,33 +212,33 @@ const TourSection = () => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  className="flex flex-col gap-4"
+                  className="glass-card rounded-[10px] border border-white/10 outline outline-1 outline-white/[0.06] p-8 flex flex-col gap-4 min-w-[260px]"
                 >
                   <span className="font-mono text-xs tracking-[0.3em] uppercase text-primary">
                     {active.date}
                   </span>
-                  <h3 className="font-serif italic text-6xl tracking-[-0.03em] text-foreground">
+                  <h3 className="font-serif italic text-5xl tracking-[-0.03em] text-foreground leading-tight">
                     {active.city}
-                    <span className="text-muted-foreground text-3xl ml-3">{active.country}</span>
+                    <span className="text-foreground/50 text-2xl ml-3">{active.country}</span>
                   </h3>
-                  <p className="font-mono text-sm text-muted-foreground tracking-[0.1em] uppercase">
+                  <p className="font-mono text-sm text-foreground/70 tracking-[0.1em] uppercase">
                     {active.venue}
                   </p>
-                  <div className="mt-2">
+                  <div className="mt-1 pt-4 border-t border-white/8">
                     {active.status === "sold out" ? (
-                      <span className="font-mono text-xs text-muted-foreground/50 tracking-[0.15em] uppercase">
+                      <span className="inline-block font-mono text-xs text-foreground/60 tracking-[0.15em] uppercase border border-white/15 rounded px-3 py-1.5">
                         Sold out
                       </span>
                     ) : (
                       <a
                         href="#"
-                        className="inline-flex items-center gap-2 font-mono text-xs tracking-[0.2em] uppercase text-foreground border-b border-foreground/20 pb-1 hover:border-primary transition-colors duration-300"
+                        className="inline-flex items-center gap-2 font-mono text-xs tracking-[0.2em] uppercase text-foreground border-b border-foreground/30 pb-1 hover:border-primary hover:text-primary transition-colors duration-300"
                       >
                         Get tickets <ArrowUpRight className="w-3 h-3" />
                       </a>
                     )}
                   </div>
-                  <p className="font-mono text-[10px] text-muted-foreground/40 tracking-[0.15em] mt-2">
+                  <p className="font-mono text-[10px] text-foreground/40 tracking-[0.15em]">
                     {activeIndex + 1} / {tourDates.length}
                   </p>
                 </motion.div>
