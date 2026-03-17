@@ -29,8 +29,8 @@ const TourSection = () => {
     offset: ["start end", "end start"],
   });
 
-  const headingY = useTransform(scrollYProgress, [0, 1], [50, -60]);
-  const listY = useTransform(scrollYProgress, [0, 1], [30, -20]);
+  const headingY = useTransform(scrollYProgress, [0, 1], [20, -25]);
+  const listY = useTransform(scrollYProgress, [0, 1], [10, -8]);
 
   return (
     <section ref={sectionRef} id="tour" className="py-[15vh] px-6 md:px-12">
