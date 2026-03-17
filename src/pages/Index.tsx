@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import TourSection from "@/components/TourSection";
 import MusicSection from "@/components/MusicSection";
 import AboutSection from "@/components/AboutSection";
+import GallerySection from "@/components/GallerySection";
 import MarqueeSection from "@/components/MarqueeSection";
 import PresskitSection from "@/components/PresskitSection";
 import ContactSection from "@/components/ContactSection";
@@ -17,6 +18,7 @@ const Index = () => {
       <MarqueeSection />
       <MusicSection />
       <AboutSection />
+      <GallerySection />
       <MarqueeSection />
       <PresskitSection />
       <ContactSection />
