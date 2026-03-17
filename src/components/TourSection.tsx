@@ -282,6 +282,7 @@ const TourSection = () => {
           {/* Scroll hint */}
           <motion.div
             className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
+            initial={{ opacity: 1 }}
             animate={{ opacity: activeIndex < tourDates.length - 1 ? 1 : 0 }}
             transition={{ duration: 0.5 }}
           >
