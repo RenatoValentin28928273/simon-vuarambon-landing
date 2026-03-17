@@ -5,6 +5,7 @@ import {
 } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import AnimatedHeading from "@/components/AnimatedHeading";
+import SmokeBackground from "@/components/SmokeBackground";
 
 // Lazy-load so Leaflet never runs on mobile and any crash is isolated
 const TourMap = lazy(() => import("@/components/TourMap"));
@@ -115,7 +116,8 @@ const TourSection = () => {
   return (
     <>
       {/* ── Mobile: simple list (no scroll-hijack) ── */}
-      <section id="tour" className="md:hidden py-[12vh] px-6">
+      <section id="tour" className="relative md:hidden py-[12vh] px-6">
+        <SmokeBackground />
         <div className="container mx-auto max-w-5xl">
           <div className="flex items-baseline justify-between mb-10">
             <AnimatedHeading
@@ -169,8 +171,9 @@ const TourSection = () => {
       {/* ── Desktop: drum-wheel scroll experience ── */}
       <div ref={outerRef} style={{ height: `${tourDates.length * 100}vh` }} className="hidden md:block">
         <section
-          className="sticky top-0 h-screen flex flex-col justify-center px-12 overflow-hidden pb-[14vh]"
+          className="relative sticky top-0 h-screen flex flex-col justify-center px-12 overflow-hidden pb-[14vh]"
         >
+          <SmokeBackground />
           <div className="container mx-auto max-w-5xl">
             <motion.div
               initial={{ opacity: 0 }}
