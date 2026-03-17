@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import {
+  motion, useScroll, useSpring, useTransform,
+  AnimatePresence, MotionValue, useMotionValue,
+} from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import AnimatedHeading from "@/components/AnimatedHeading";
 
@@ -13,60 +16,99 @@ const tourDates = [
   { date: "JUL 19", city: "Córdoba",      country: "AR", venue: "Club Paraguay",           status: "tickets" },
 ];
 
-const VISIBLE = 5;
 const ITEM_HEIGHT = 96;
 
-const getStyle = (distance: number) => {
-  const abs = Math.abs(distance);
-  if (abs === 0) return { scale: 1,    opacity: 1    };
-  if (abs === 1) return { scale: 0.72, opacity: 0.45 };
-  if (abs === 2) return { scale: 0.52, opacity: 0.2  };
-  return              { scale: 0.38, opacity: 0.08 };
+// Sub-component so useTransform runs outside a loop
+const TourItem = ({
+  city,
+  index,
+  fractionalIndex,
+}: {
+  city: string;
+  index: number;
+  fractionalIndex: MotionValue<number>;
+}) => {
+  const scale = useTransform(fractionalIndex, (fi) => {
+    const abs = Math.abs(index - fi);
+    return Math.max(0.35, 1 - abs * 0.23);
+  });
+  const opacity = useTransform(fractionalIndex, (fi) => {
+    const abs = Math.abs(index - fi);
+    return Math.max(0.04, 1 - abs * 0.38);
+  });
+
+  return (
+    <motion.div
+      style={{
+        scale,
+        opacity,
+        height: ITEM_HEIGHT,
+        fontSize: "clamp(1.8rem, 5vw, 3.5rem)",
+        color: "hsl(var(--foreground))",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        letterSpacing: "-0.03em",
+        whiteSpace: "nowrap",
+        fontWeight: 900,
+        textTransform: "uppercase",
+      }}
+    >
+      {city}
+    </motion.div>
+  );
 };
 
 const TourSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const outerRef = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: outerRef,
     offset: ["start start", "end end"],
   });
 
-  // Map scroll progress → active index
-  useEffect(() => {
-    const unsub = scrollYProgress.on("change", (v) => {
-      const idx = Math.round(v * (tourDates.length - 1));
-      setActiveIndex(Math.min(Math.max(idx, 0), tourDates.length - 1));
-    });
-    return unsub;
-  }, [scrollYProgress]);
-
-  const half = Math.floor(VISIBLE / 2);
-  const indices = Array.from({ length: VISIBLE }, (_, k) => {
-    const offset = k - half;
-    return { offset, idx: (activeIndex + offset + tourDates.length) % tourDates.length };
+  // Smooth the scroll progress with a spring
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 40,
+    damping: 18,
+    restDelta: 0.001,
   });
 
-  const active = tourDates[activeIndex];
+  // Fractional index (0 → tourDates.length - 1)
+  const fractionalIndex = useTransform(
+    smoothProgress,
+    [0, 1],
+    [0, tourDates.length - 1]
+  );
 
-  // Heading parallax from sticky section scroll
+  // Y offset: slide the list so the active item stays centered
+  const half = Math.floor(tourDates.length / 2);
+  const listY = useTransform(
+    fractionalIndex,
+    (fi) => (half - fi) * ITEM_HEIGHT
+  );
+
+  // Update discrete activeIndex for the detail panel
+  useEffect(() => {
+    const unsub = fractionalIndex.on("change", (fi) => {
+      setActiveIndex(Math.min(Math.max(Math.round(fi), 0), tourDates.length - 1));
+    });
+    return unsub;
+  }, [fractionalIndex]);
+
+  // Heading parallax
   const { scrollYProgress: headingProgress } = useScroll({
     target: outerRef,
     offset: ["start end", "end start"],
   });
   const headingY = useTransform(headingProgress, [0, 1], [20, -25]);
 
+  const active = tourDates[activeIndex];
+
   return (
-    // Outer tall div — gives scroll room for each tour date
-    <div
-      ref={outerRef}
-      style={{ height: `${tourDates.length * 100}vh` }}
-    >
-      {/* Sticky container */}
+    <div ref={outerRef} style={{ height: `${tourDates.length * 100}vh` }}>
       <section
-        ref={sectionRef}
         id="tour"
         className="sticky top-0 h-screen flex flex-col justify-center px-6 md:px-12 overflow-hidden"
       >
@@ -91,40 +133,25 @@ const TourSection = () => {
             <div className="flex-shrink-0">
               <div
                 className="relative overflow-hidden select-none"
-                style={{ height: VISIBLE * ITEM_HEIGHT }}
+                style={{ height: 5 * ITEM_HEIGHT }}
               >
                 <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
                 <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
 
-                <div className="flex flex-col">
-                  {indices.map(({ offset, idx }) => {
-                    const style = getStyle(offset);
-                    return (
-                      <motion.div
-                        key={`${offset}-${idx}`}
-                        animate={{ scale: style.scale, opacity: style.opacity }}
-                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                        className="font-sans font-black uppercase text-center leading-none"
-                        style={{
-                          height: ITEM_HEIGHT,
-                          fontSize: "clamp(1.8rem, 5vw, 3.5rem)",
-                          color: "hsl(var(--foreground))",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          letterSpacing: "-0.03em",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {tourDates[idx].city}
-                      </motion.div>
-                    );
-                  })}
-                </div>
+                <motion.div style={{ y: listY }}>
+                  {tourDates.map((tour, i) => (
+                    <TourItem
+                      key={i}
+                      city={tour.city}
+                      index={i}
+                      fractionalIndex={fractionalIndex}
+                    />
+                  ))}
+                </motion.div>
               </div>
             </div>
 
-            {/* Active date detail */}
+            {/* Detail panel */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeIndex}
@@ -167,11 +194,11 @@ const TourSection = () => {
         </div>
 
         {/* Scroll hint */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 pointer-events-none">
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="w-px h-8 bg-muted-foreground/30"
+            className="w-px h-8 bg-muted-foreground/30 mx-auto"
           />
         </div>
       </section>
