@@ -233,8 +233,13 @@ const TourSection = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="rounded-[10px] border border-white/15 p-6 flex flex-col gap-4 shrink-0 w-[360px]"
-                style={{ background: "rgba(255,255,255,0.07)", backdropFilter: "blur(20px)" }}
+                className="rounded-[10px] p-6 flex flex-col gap-4 shrink-0 w-[360px]"
+                style={{
+                  background: "linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%)",
+                  border: "1px solid rgba(255,255,255,0.18)",
+                  boxShadow: "0 0 40px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.12)",
+                  backdropFilter: "blur(20px)",
+                }}
               >
                 <span className="font-mono text-xs tracking-[0.3em] uppercase text-primary">
                   {current.date}
