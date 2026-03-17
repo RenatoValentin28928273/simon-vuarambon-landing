@@ -45,7 +45,7 @@ const MusicSection = () => {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             style={{ y: coverY }}
           >
-            <div className="aspect-square overflow-hidden mb-8">
+            <div className="aspect-square overflow-hidden mb-8 rounded-[10px]">
               <motion.img
                 src={releaseCover}
                 alt="Latest Release"
