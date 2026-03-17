@@ -17,8 +17,8 @@ const tourDates = [
   { date: "JUL 19", city: "Córdoba",      country: "AR", venue: "Club Paraguay",           status: "tickets" },
 ];
 
-const ITEM_H  = 88;
-const VISIBLE = 7;
+const ITEM_H  = 80;
+const VISIBLE = 5; // show 5 at a time: -2, -1, active, +1, +2
 
 const TourSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -179,15 +179,17 @@ const TourSection = () => {
             {/* Left: drum wheel */}
             <div className="flex-1 min-w-0">
               <div className="relative overflow-hidden select-none" style={{ height: wheelH }}>
+                {/* Fade only the outer edges */}
                 <div
                   className="absolute inset-x-0 top-0 z-10 pointer-events-none"
-                  style={{ height: 3 * ITEM_H, background: "linear-gradient(to bottom, black 5%, transparent 100%)" }}
+                  style={{ height: ITEM_H, background: "linear-gradient(to bottom, black, transparent)" }}
                 />
                 <div
                   className="absolute inset-x-0 bottom-0 z-10 pointer-events-none"
-                  style={{ height: 3 * ITEM_H, background: "linear-gradient(to top, black 5%, transparent 100%)" }}
+                  style={{ height: ITEM_H, background: "linear-gradient(to top, black, transparent)" }}
                 />
                 <motion.div
+                  initial={{ y: listY }}
                   animate={{ y: listY }}
                   transition={{ type: "spring", stiffness: 220, damping: 28 }}
                 >
