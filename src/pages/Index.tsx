@@ -19,34 +19,34 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <SectionDivider />
-      <ScrollReveal>
+      <ScrollReveal speed={0.12}>
         <TourSection />
       </ScrollReveal>
-      <ScrollReveal delay={0.05}>
+      <ScrollReveal speed={0.06}>
         <MarqueeSection />
       </ScrollReveal>
-      <ScrollReveal>
+      <ScrollReveal speed={0.18}>
         <MusicSection />
       </ScrollReveal>
       <SectionDivider />
-      <ScrollReveal>
+      <ScrollReveal speed={0.14}>
         <AboutSection />
       </ScrollReveal>
       <SectionDivider />
-      <ScrollReveal>
+      <ScrollReveal speed={0.1}>
         <GallerySection />
       </ScrollReveal>
-      <ScrollReveal delay={0.05}>
+      <ScrollReveal speed={0.06}>
         <MarqueeSection />
       </ScrollReveal>
-      <ScrollReveal>
+      <ScrollReveal speed={0.16}>
         <PresskitSection />
       </ScrollReveal>
       <SectionDivider />
-      <ScrollReveal>
+      <ScrollReveal speed={0.13}>
         <ContactSection />
       </ScrollReveal>
-      <ScrollReveal delay={0.1}>
+      <ScrollReveal speed={0.08}>
         <Footer />
       </ScrollReveal>
     </div>

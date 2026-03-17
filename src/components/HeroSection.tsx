@@ -1,5 +1,53 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import InteractiveBackground from "@/components/InteractiveBackground";
+
+const words = ["Deep", "Organic", "Melodic", "Soulful", "Resonant"];
+
+const Typewriter = () => {
+  const [wordIndex, setWordIndex] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [phase, setPhase] = useState<"typing" | "waiting" | "erasing">("typing");
+
+  useEffect(() => {
+    const word = words[wordIndex];
+
+    if (phase === "typing") {
+      if (displayed.length < word.length) {
+        const t = setTimeout(() => setDisplayed(word.slice(0, displayed.length + 1)), 100);
+        return () => clearTimeout(t);
+      } else {
+        const t = setTimeout(() => setPhase("waiting"), 2000);
+        return () => clearTimeout(t);
+      }
+    }
+
+    if (phase === "waiting") {
+      setPhase("erasing");
+    }
+
+    if (phase === "erasing") {
+      if (displayed.length > 0) {
+        const t = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 50);
+        return () => clearTimeout(t);
+      } else {
+        setWordIndex((i) => (i + 1) % words.length);
+        setPhase("typing");
+      }
+    }
+  }, [displayed, phase, wordIndex]);
+
+  return (
+    <span className="inline-flex items-center gap-[2px]">
+      <span>{displayed}</span>
+      <motion.span
+        animate={{ opacity: [1, 0] }}
+        transition={{ duration: 0.75, repeat: Infinity, repeatType: "reverse", ease: "steps(1)" }}
+        className="inline-block w-px h-[1em] bg-muted-foreground align-middle"
+      />
+    </span>
+  );
+};
 
 const HeroSection = () => {
   return (
@@ -19,7 +67,7 @@ const HeroSection = () => {
           transition={{ duration: 1.2, delay: 0.3 }}
           className="font-mono text-xs tracking-[0.3em] uppercase text-muted-foreground mb-6"
         >
-          Deep / Organic / Melodic
+          <Typewriter />
         </motion.p>
 
         <motion.h1
