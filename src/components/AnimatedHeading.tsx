@@ -12,7 +12,7 @@ const AnimatedHeading = ({ text, className = "" }: AnimatedHeadingProps) => {
     <motion.h2
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, amount: 0.1 }}
       className={className}
     >
       {chars.map((char, i) => (

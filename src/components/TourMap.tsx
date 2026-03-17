@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import * as L from "leaflet";
-import "leaflet/dist/leaflet.css";
 
 // Coordinates for each city
 const COORDS: Record<string, [number, number]> = {

@@ -1,11 +1,16 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense, lazy } from "react";
 import {
   motion, useScroll, useSpring, useTransform,
   AnimatePresence, MotionValue, useMotionValue,
 } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import AnimatedHeading from "@/components/AnimatedHeading";
-import TourMap from "@/components/TourMap";
+
+// Lazy-load so Leaflet never runs on mobile and any crash is isolated
+const TourMap = lazy(() => import("@/components/TourMap"));
+
+// Sync mobile detection — avoids mounting Leaflet on touch devices
+const IS_MOBILE = typeof window !== "undefined" && window.innerWidth < 768;
 
 const tourDates = [
   { date: "MAR 28", city: "Buenos Aires", country: "AR", venue: "Dahaus, Palacio Alsina", status: "tickets" },
@@ -226,8 +231,12 @@ const TourSection = () => {
                     {active.venue}
                   </p>
 
-                  {/* Map */}
-                  <TourMap city={active.city} />
+                  {/* Map — desktop only, lazy-loaded */}
+                  {!IS_MOBILE && (
+                    <Suspense fallback={<div style={{ height: 200 }} className="w-full rounded-md bg-white/5" />}>
+                      <TourMap city={active.city} />
+                    </Suspense>
+                  )}
 
                   <div className="mt-1 pt-4 border-t border-white/8">
                     {active.status === "sold out" ? (
