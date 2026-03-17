@@ -97,7 +97,7 @@ const TourSection = () => {
   return (
     <>
       {/* ── Mobile: card list ── */}
-      <section id="tour" className="relative md:hidden py-[12vh] px-6 overflow-hidden">
+      <section id="tour" className="relative md:hidden py-[12vh] px-6 overflow-hidden bg-black">
         <div className="container mx-auto max-w-5xl">
           <div className="flex items-baseline justify-between mb-10">
             <AnimatedHeading
@@ -152,7 +152,7 @@ const TourSection = () => {
       <section
         id="tour"
         ref={sectionRef}
-        className="relative hidden md:flex flex-col justify-center px-12 overflow-hidden"
+        className="relative hidden md:flex flex-col justify-center px-12 overflow-hidden bg-black"
         style={{ height: "100vh" }}
       >
         <SmokeBackground />
