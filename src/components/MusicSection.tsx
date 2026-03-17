@@ -24,9 +24,9 @@ const MusicSection = () => {
     offset: ["start end", "end start"],
   });
 
-  const coverY = useTransform(scrollYProgress, [0, 1], [100, -60]);
-  const headingY = useTransform(scrollYProgress, [0, 1], [50, -50]);
-  const listY = useTransform(scrollYProgress, [0, 1], [40, -30]);
+  const coverY = useTransform(scrollYProgress, [0, 1], [35, -25]);
+  const headingY = useTransform(scrollYProgress, [0, 1], [20, -20]);
+  const listY = useTransform(scrollYProgress, [0, 1], [15, -10]);
 
   return (
     <section ref={sectionRef} id="music" className="relative py-[15vh] px-6 md:px-12 overflow-hidden">

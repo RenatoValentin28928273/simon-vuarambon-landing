@@ -18,9 +18,9 @@ const ContactSection = () => {
     offset: ["start end", "end start"],
   });
 
-  const headingY = useTransform(scrollYProgress, [0, 1], [40, -50]);
-  const leftY = useTransform(scrollYProgress, [0, 1], [60, -30]);
-  const rightY = useTransform(scrollYProgress, [0, 1], [30, -50]);
+  const headingY = useTransform(scrollYProgress, [0, 1], [15, -20]);
+  const leftY = useTransform(scrollYProgress, [0, 1], [25, -12]);
+  const rightY = useTransform(scrollYProgress, [0, 1], [12, -20]);
 
   return (
     <section ref={sectionRef} id="contact" className="relative py-[15vh] px-6 md:px-12 overflow-hidden">

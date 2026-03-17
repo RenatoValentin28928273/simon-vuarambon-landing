@@ -10,9 +10,9 @@ const AboutSection = () => {
     offset: ["start end", "end start"],
   });
 
-  const imageY = useTransform(scrollYProgress, [0, 1], [80, -80]);
-  const textY = useTransform(scrollYProgress, [0, 1], [60, -40]);
-  const headingY = useTransform(scrollYProgress, [0, 1], [40, -60]);
+  const imageY = useTransform(scrollYProgress, [0, 1], [30, -30]);
+  const textY = useTransform(scrollYProgress, [0, 1], [20, -15]);
+  const headingY = useTransform(scrollYProgress, [0, 1], [15, -25]);
 
   return (
     <section ref={sectionRef} id="about" className="relative py-[15vh] px-6 md:px-12 overflow-hidden">

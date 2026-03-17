@@ -35,8 +35,8 @@ const GallerySection = () => {
     offset: ["start end", "end start"],
   });
 
-  const headingY = useTransform(scrollYProgress, [0, 1], [50, -60]);
-  const gridY = useTransform(scrollYProgress, [0, 1], [40, -20]);
+  const headingY = useTransform(scrollYProgress, [0, 1], [20, -25]);
+  const gridY = useTransform(scrollYProgress, [0, 1], [15, -8]);
 
   const openLightbox = (index: number) => setLightboxIndex(index);
   const closeLightbox = () => setLightboxIndex(null);
