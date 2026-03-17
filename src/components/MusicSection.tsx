@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import releaseCover from "@/assets/release-cover.jpg";
 import InteractiveBackground from "@/components/InteractiveBackground";
+import AnimatedHeading from "@/components/AnimatedHeading";
 
 const releases = [
   { title: "The Night Mail (Simon Vuarambon Remix)", artist: "New Jackson", label: "Bedrock Records", year: "2026" },
@@ -80,16 +81,10 @@ const MusicSection = () => {
 
           {/* Right: releases list */}
           <div className="flex flex-col justify-end">
-            <motion.h2
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              style={{ y: headingY }}
+            <AnimatedHeading
+              text="Music"
               className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground mb-12"
-            >
-              Music
-            </motion.h2>
+            />
 
             <motion.div style={{ y: listY }}>
               {releases.map((release, i) => (

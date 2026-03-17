@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Download, FileText, Image, Music } from "lucide-react";
+import AnimatedHeading from "@/components/AnimatedHeading";
 import portrait from "@/assets/simon-portrait.jpg";
 import heroBg from "@/assets/hero-bg.jpg";
 
@@ -53,9 +54,10 @@ const PresskitSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            <h2 className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground mb-6">
-              Presskit
-            </h2>
+            <AnimatedHeading
+              text="Presskit"
+              className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground mb-6"
+            />
             <p className="font-mono text-sm text-muted-foreground leading-relaxed mb-12 max-w-sm">
               Material de imprensa, fotos em alta resolução e rider técnico disponíveis para download.
             </p>

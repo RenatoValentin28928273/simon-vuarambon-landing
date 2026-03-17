@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import InteractiveBackground from "@/components/InteractiveBackground";
+import AnimatedHeading from "@/components/AnimatedHeading";
 
 const socials = [
   { name: "Instagram", url: "https://www.instagram.com/simonvuarambon/" },
@@ -36,12 +37,10 @@ const ContactSection = () => {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             style={{ y: leftY }}
           >
-            <motion.h2
-              style={{ y: headingY }}
+            <AnimatedHeading
+              text="Contact"
               className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground mb-10"
-            >
-              Contact
-            </motion.h2>
+            />
 
             <div className="space-y-8">
               <div>
