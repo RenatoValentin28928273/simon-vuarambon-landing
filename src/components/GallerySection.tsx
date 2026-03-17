@@ -35,11 +35,9 @@ const GallerySection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
 
-  const autoplay = useRef(Autoplay({ delay: 3500, stopOnInteraction: false }));
-
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: "center", skipSnaps: false },
-    [autoplay.current]
+    [Autoplay({ delay: 3500, stopOnInteraction: false })]
   );
 
   const { scrollYProgress } = useScroll({
@@ -111,8 +109,8 @@ const GallerySection = () => {
         <div
           ref={emblaRef}
           className="overflow-hidden"
-          onMouseEnter={() => autoplay.current.stop()}
-          onMouseLeave={() => autoplay.current.play()}
+          onMouseEnter={() => emblaApi?.plugins()?.autoplay?.stop()}
+          onMouseLeave={() => emblaApi?.plugins()?.autoplay?.play()}
         >
           <div className="flex gap-4 md:gap-6">
             {media.map((item, i) => {
