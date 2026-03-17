@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import AnimatedHeading from "@/components/AnimatedHeading";
 
 const tourDates = [
   { date: "MAR 28", city: "Buenos Aires, AR", venue: "Dahaus, Palacio Alsina", status: "tickets" },
