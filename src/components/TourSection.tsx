@@ -174,11 +174,11 @@ const TourSection = () => {
           </motion.div>
 
           {/* Drum wheel + detail card */}
-          <div className="flex flex-row items-center gap-12 xl:gap-20">
+          <div className="flex flex-row items-center gap-8 xl:gap-12">
 
             {/* Left: drum wheel */}
-            <div className="flex-1 min-w-0">
-              <div className="relative overflow-hidden select-none" style={{ height: wheelH }}>
+            <div className="flex-1 min-w-0 flex justify-center">
+              <div className="relative overflow-hidden select-none w-full max-w-lg" style={{ height: wheelH }}>
                 {/* Fade only the outer edges */}
                 <div
                   className="absolute inset-x-0 top-0 z-10 pointer-events-none"
@@ -203,7 +203,7 @@ const TourSection = () => {
                           scale:   Math.max(0.52, 1 - dist * 0.14),
                         }}
                         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                        className="flex items-center"
+                        className="flex items-center justify-center"
                         style={{ height: ITEM_H }}
                       >
                         <span style={{
