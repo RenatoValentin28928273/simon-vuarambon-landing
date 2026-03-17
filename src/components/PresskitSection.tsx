@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Download, FileText, Image, Music } from "lucide-react";
+import AnimatedHeading from "@/components/AnimatedHeading";
 import portrait from "@/assets/simon-portrait.jpg";
 import heroBg from "@/assets/hero-bg.jpg";
 
