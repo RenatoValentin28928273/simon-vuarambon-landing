@@ -110,14 +110,18 @@ const HeroSection = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
       >
-        <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-muted-foreground">Scroll</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-px h-8 bg-muted-foreground/50"
-        />
+        <span className="font-mono text-[11px] tracking-[0.4em] uppercase text-foreground/70">Scroll</span>
+
+        {/* Animated track + ball */}
+        <div className="relative flex flex-col items-center w-px h-14 bg-foreground/15 overflow-hidden rounded-full">
+          <motion.div
+            animate={{ y: ["0%", "200%"] }}
+            transition={{ duration: 1.4, repeat: Infinity, ease: "easeIn", repeatDelay: 0.3 }}
+            className="w-px h-5 bg-primary rounded-full"
+          />
+        </div>
       </motion.div>
     </section>
   );
