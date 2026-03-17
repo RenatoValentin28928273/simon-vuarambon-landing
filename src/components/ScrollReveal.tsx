@@ -1,6 +1,5 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 type Props = {
   children: React.ReactNode;
@@ -8,31 +7,45 @@ type Props = {
   className?: string;
 };
 
+// Detect mobile synchronously on first render to avoid flash
+function useMobileSync() {
+  const [isMobile] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.innerWidth < 768;
+  });
+  return isMobile;
+}
+
 const ScrollReveal = ({ children, speed = 0.15, className }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
+  const isMobile = useMobileSync();
   const prefersReducedMotion = useReducedMotion();
-
-  // On mobile or reduced-motion: cut speed in half, keep opacity gentle
-  const effectiveSpeed = (prefersReducedMotion || isMobile) ? speed * 0.4 : speed;
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
 
+  // Always create transforms (hooks must be unconditional)
   const y = useTransform(
     scrollYProgress,
     [0, 1],
-    [`${effectiveSpeed * 100}px`, `-${effectiveSpeed * 100}px`]
+    [`${speed * 100}px`, `-${speed * 100}px`]
   );
-
-  // Mobile: much softer fade so content is never invisible mid-scroll
   const opacity = useTransform(
     scrollYProgress,
-    isMobile ? [0, 0.06, 0.94, 1] : [0, 0.15, 0.85, 1],
-    isMobile ? [0, 1, 1, 0.9] : [0, 1, 1, 0.6]
+    [0, 0.12, 0.88, 1],
+    [0, 1, 1, 0.7]
   );
+
+  // Mobile / reduced-motion: skip all animations, always show content
+  if (isMobile || prefersReducedMotion) {
+    return (
+      <div ref={ref} className={className}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <motion.div ref={ref} style={{ y, opacity }} className={className}>
