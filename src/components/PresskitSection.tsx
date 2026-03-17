@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { Download, FileText, Image, Music } from "lucide-react";
 import AnimatedHeading from "@/components/AnimatedHeading";
 import portrait from "@/assets/simon-portrait.jpg";
-import heroBg from "@/assets/hero-bg.jpg";
 
 const presskitItems = [
   {
@@ -62,26 +61,16 @@ const PresskitSection = () => {
               Material de imprensa, fotos em alta resolução e rider técnico disponíveis para download.
             </p>
 
-            {/* Photo preview mosaic */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="aspect-[3/4] overflow-hidden">
-                <motion.img
-                  src={portrait}
-                  alt="Simon Vuarambon — Press photo 1"
-                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                  whileHover={{ scale: 1.04 }}
-                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                />
-              </div>
-              <div className="aspect-[3/4] overflow-hidden">
-                <motion.img
-                  src={heroBg}
-                  alt="Simon Vuarambon — Press photo 2"
-                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                  whileHover={{ scale: 1.04 }}
-                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                />
-              </div>
+            {/* Artist photo as background */}
+            <div className="relative overflow-hidden aspect-[3/4] w-full max-w-sm">
+              <motion.img
+                src={portrait}
+                alt="Simon Vuarambon — Press photo"
+                className="w-full h-full object-cover grayscale"
+                whileHover={{ scale: 1.03 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
             </div>
           </motion.div>
 
