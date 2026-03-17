@@ -39,6 +39,7 @@ const Navbar = () => {
         <div className="overflow-hidden">
           <motion.a
             href="#"
+            data-cursor="HOME"
             initial={{ y: "110%" }}
             animate={{ y: "0%" }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
@@ -54,6 +55,7 @@ const Navbar = () => {
             <div key={item.label} className="overflow-hidden">
               <motion.a
                 href={item.href}
+                data-cursor={item.label}
                 initial={{ y: "110%", opacity: 0 }}
                 animate={{ y: "0%", opacity: 1 }}
                 transition={{
