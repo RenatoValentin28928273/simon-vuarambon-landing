@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 
 const tourDates = [
@@ -22,14 +23,24 @@ const item = {
 };
 
 const TourSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const headingY = useTransform(scrollYProgress, [0, 1], [50, -60]);
+  const listY = useTransform(scrollYProgress, [0, 1], [30, -20]);
+
   return (
-    <section id="tour" className="py-[15vh] px-6 md:px-12">
+    <section ref={sectionRef} id="tour" className="py-[15vh] px-6 md:px-12">
       <div className="container mx-auto max-w-5xl">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
+          style={{ y: headingY }}
           className="flex items-baseline justify-between mb-16"
         >
           <h2 className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground">
@@ -45,6 +56,7 @@ const TourSection = () => {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
+          style={{ y: listY }}
         >
           {tourDates.map((tour, i) => (
             <motion.a

@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import InteractiveBackground from "@/components/InteractiveBackground";
 
 const socials = [
@@ -11,8 +12,18 @@ const socials = [
 ];
 
 const ContactSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const headingY = useTransform(scrollYProgress, [0, 1], [40, -50]);
+  const leftY = useTransform(scrollYProgress, [0, 1], [60, -30]);
+  const rightY = useTransform(scrollYProgress, [0, 1], [30, -50]);
+
   return (
-    <section id="contact" className="relative py-[15vh] px-6 md:px-12 overflow-hidden">
+    <section ref={sectionRef} id="contact" className="relative py-[15vh] px-6 md:px-12 overflow-hidden">
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <InteractiveBackground />
       </div>
@@ -23,10 +34,14 @@ const ContactSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            style={{ y: leftY }}
           >
-            <h2 className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground mb-10">
+            <motion.h2
+              style={{ y: headingY }}
+              className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground mb-10"
+            >
               Contact
-            </h2>
+            </motion.h2>
 
             <div className="space-y-8">
               <div>
@@ -62,6 +77,7 @@ const ContactSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            style={{ y: rightY }}
             className="flex flex-col justify-end"
           >
             <p className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground mb-6">

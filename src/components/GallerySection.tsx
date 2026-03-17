@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useCallback, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Play } from "lucide-react";
 
 import gallery1 from "@/assets/gallery-1.jpg";
@@ -29,6 +29,14 @@ const media: MediaItem[] = [
 
 const GallerySection = () => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const headingY = useTransform(scrollYProgress, [0, 1], [50, -60]);
+  const gridY = useTransform(scrollYProgress, [0, 1], [40, -20]);
 
   const openLightbox = (index: number) => setLightboxIndex(index);
   const closeLightbox = () => setLightboxIndex(null);
@@ -41,7 +49,6 @@ const GallerySection = () => {
     [lightboxIndex]
   );
 
-  // Keyboard navigation
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === "Escape") closeLightbox();
@@ -52,13 +59,14 @@ const GallerySection = () => {
   );
 
   return (
-    <section id="gallery" className="py-[15vh] px-6 md:px-12">
+    <section ref={sectionRef} id="gallery" className="py-[15vh] px-6 md:px-12">
       <div className="container mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
+          style={{ y: headingY }}
           className="flex items-baseline justify-between mb-16"
         >
           <h2 className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground">
@@ -69,8 +77,8 @@ const GallerySection = () => {
           </span>
         </motion.div>
 
-        {/* Masonry-style grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+        {/* Masonry-style grid with parallax */}
+        <motion.div style={{ y: gridY }} className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
           {media.map((item, i) => (
             <motion.button
               key={i}
@@ -104,7 +112,7 @@ const GallerySection = () => {
               </div>
             </motion.button>
           ))}
-        </div>
+        </motion.div>
       </div>
 
       {/* Lightbox */}
@@ -123,7 +131,6 @@ const GallerySection = () => {
             aria-modal="true"
             ref={(el) => el?.focus()}
           >
-            {/* Close */}
             <button
               onClick={closeLightbox}
               className="absolute top-6 right-6 z-10 w-10 h-10 flex items-center justify-center border border-foreground/10 rounded-sm hover:border-primary/40 transition-colors duration-300"
@@ -131,7 +138,6 @@ const GallerySection = () => {
               <X className="w-4 h-4 text-foreground" />
             </button>
 
-            {/* Prev */}
             <button
               onClick={(e) => { e.stopPropagation(); navigate(-1); }}
               className="absolute left-4 md:left-8 z-10 w-10 h-10 flex items-center justify-center border border-foreground/10 rounded-sm hover:border-primary/40 transition-colors duration-300"
@@ -139,7 +145,6 @@ const GallerySection = () => {
               <ChevronLeft className="w-5 h-5 text-foreground" />
             </button>
 
-            {/* Next */}
             <button
               onClick={(e) => { e.stopPropagation(); navigate(1); }}
               className="absolute right-4 md:right-8 z-10 w-10 h-10 flex items-center justify-center border border-foreground/10 rounded-sm hover:border-primary/40 transition-colors duration-300"
@@ -147,7 +152,6 @@ const GallerySection = () => {
               <ChevronRight className="w-5 h-5 text-foreground" />
             </button>
 
-            {/* Content */}
             <motion.div
               key={lightboxIndex}
               initial={{ opacity: 0, scale: 0.95 }}
@@ -175,7 +179,6 @@ const GallerySection = () => {
                 />
               )}
 
-              {/* Caption */}
               <div className="mt-6 text-center">
                 <p className="font-mono text-xs tracking-[0.15em] uppercase text-muted-foreground">
                   {media[lightboxIndex].caption}
