@@ -16,7 +16,7 @@ const tourDates = [
   { date: "JUL 19", city: "Córdoba",      country: "AR", venue: "Club Paraguay",           status: "tickets" },
 ];
 
-const ITEM_H  = 80;
+const ITEM_H  = 96;
 const VISIBLE = 5; // show 5 at a time: -2, -1, active, +1, +2
 
 const TourSection = () => {
@@ -195,8 +195,8 @@ const TourSection = () => {
                       <motion.div
                         key={i}
                         animate={{
-                          opacity: Math.max(0.04, 1 - dist * 0.28),
-                          scale:   Math.max(0.52, 1 - dist * 0.14),
+                          opacity: dist === 0 ? 1 : dist === 1 ? 0.5 : dist === 2 ? 0.2 : 0.06,
+                          scale:   dist === 0 ? 1 : dist === 1 ? 0.82 : dist === 2 ? 0.68 : 0.58,
                         }}
                         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                         className="flex items-center justify-center"
