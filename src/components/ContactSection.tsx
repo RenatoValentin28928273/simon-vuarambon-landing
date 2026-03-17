@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import InteractiveBackground from "@/components/InteractiveBackground";
 
 const socials = [
   { name: "Instagram", url: "https://www.instagram.com/simonvuarambon/" },
@@ -11,7 +12,10 @@ const socials = [
 
 const ContactSection = () => {
   return (
-    <section id="contact" className="py-[15vh] px-6 md:px-12">
+    <section id="contact" className="relative py-[15vh] px-6 md:px-12 overflow-hidden">
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <InteractiveBackground />
+      </div>
       <div className="container mx-auto max-w-5xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
           <motion.div

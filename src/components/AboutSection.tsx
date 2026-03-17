@@ -1,9 +1,13 @@
 import { motion } from "framer-motion";
 import portrait from "@/assets/simon-portrait.jpg";
+import InteractiveBackground from "@/components/InteractiveBackground";
 
 const AboutSection = () => {
   return (
-    <section id="about" className="py-[15vh] px-6 md:px-12">
+    <section id="about" className="relative py-[15vh] px-6 md:px-12 overflow-hidden">
+      <div className="absolute inset-0 opacity-15 pointer-events-none">
+        <InteractiveBackground />
+      </div>
       <div className="container mx-auto max-w-5xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center">
           {/* Image */}
