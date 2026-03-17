@@ -77,6 +77,13 @@
   opacity: var(--grain-opacity);
 }
 
+/* Hide default cursor on pointer:fine (mouse) devices */
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;

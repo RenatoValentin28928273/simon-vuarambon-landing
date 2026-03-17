@@ -91,6 +91,7 @@ const PresskitSection = () => {
                   whileHover={{ y: -6, x: 4, scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ type: "spring", stiffness: 320, damping: 22 }}
+                  data-cursor="DOWNLOAD"
                   className="group w-full text-left glass-card p-6 md:p-8 flex items-start gap-6 hover:border-primary/30 transition-colors duration-500 cursor-pointer border border-white/10 outline outline-1 outline-white/[0.06]"
                   style={{ borderRadius: 10 }}
                 >

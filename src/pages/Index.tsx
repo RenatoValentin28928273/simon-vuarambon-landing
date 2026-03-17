@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import ScrollProgress from "@/components/ScrollProgress";
 import MiniPlayer from "@/components/MiniPlayer";
+import CustomCursor from "@/components/CustomCursor";
 import HeroSection from "@/components/HeroSection";
 import TourSection from "@/components/TourSection";
 import MusicSection from "@/components/MusicSection";
@@ -16,6 +17,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 const Index = () => {
   return (
     <div className="grain-overlay">
+      <CustomCursor />
       <ScrollProgress />
       <Navbar />
       <MiniPlayer />

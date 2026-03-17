@@ -108,6 +108,7 @@ const GallerySection = () => {
             <button
               key={i}
               onClick={() => openLightbox(i)}
+              data-cursor="VIEW"
               className="relative flex-shrink-0 w-[320px] md:w-[420px] h-[220px] md:h-[280px] overflow-hidden group cursor-pointer"
             >
               <img
