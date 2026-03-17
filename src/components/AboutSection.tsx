@@ -40,14 +40,10 @@ const AboutSection = () => {
 
           {/* Text with parallax */}
           <div>
-            <motion.h2
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              style={{ y: headingY }}
+            <AnimatedHeading
+              text="About"
               className="font-serif italic text-5xl md:text-7xl tracking-[-0.04em] text-foreground mb-10"
-            >
+            />
               About
             </motion.h2>
 
