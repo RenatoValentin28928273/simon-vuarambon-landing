@@ -20,68 +20,101 @@ const Navbar = () => {
   });
 
   return (
-    <motion.nav
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 transition-all duration-500 ${
-        scrolled ? "bg-background/80 backdrop-blur-md border-b border-foreground/5" : ""
+    <div
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-500 ${
+        scrolled ? "bg-background/85 backdrop-blur-md" : ""
       }`}
     >
-      <a href="#" className="font-mono text-xs tracking-[0.3em] uppercase text-foreground">
-        Simon Vuarambon
-      </a>
+      {/* Bottom border line that draws in when scrolled */}
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: scrolled ? 1 : 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        style={{ originX: 0 }}
+        className="absolute bottom-0 left-0 right-0 h-px bg-foreground/8"
+      />
 
-      {/* Desktop nav */}
-      <div className="hidden md:flex items-center gap-10">
-        {navItems.map((item) => (
-          <a
-            key={item.label}
-            href={item.href}
-            className="link-underline font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-foreground transition-colors duration-500"
-          >
-            {item.label}
-          </a>
-        ))}
-      </div>
+      <nav className="flex items-center justify-between px-6 md:px-12 py-5">
+        {/* Logo — slides in from left */}
+        <motion.a
+          href="#"
+          initial={{ opacity: 0, x: -14, filter: "blur(4px)" }}
+          animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="font-mono text-xs tracking-[0.3em] uppercase text-foreground"
+        >
+          Simon Vuarambon
+        </motion.a>
 
-      {/* Mobile toggle */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden flex flex-col gap-1.5 z-50"
-      >
-        <motion.span
-          animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-          className="block w-6 h-px bg-foreground"
-        />
-        <motion.span
-          animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
-          className="block w-6 h-px bg-foreground"
-        />
-        <motion.span
-          animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-          className="block w-6 h-px bg-foreground"
-        />
-      </button>
+        {/* Desktop nav — items stagger in from top with blur */}
+        <div className="hidden md:flex items-center gap-10">
+          {navItems.map((item, i) => (
+            <motion.a
+              key={item.label}
+              href={item.href}
+              initial={{ opacity: 0, y: -10, filter: "blur(6px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{
+                duration: 0.55,
+                delay: 0.3 + i * 0.07,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="link-underline font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-foreground transition-colors duration-500"
+            >
+              {item.label}
+            </motion.a>
+          ))}
+        </div>
 
-      {/* Mobile menu */}
+        {/* Mobile toggle — fades in last */}
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.4 }}
+          onClick={() => setIsOpen(!isOpen)}
+          className="md:hidden flex flex-col gap-1.5 z-50 relative"
+          aria-label="Toggle menu"
+        >
+          <motion.span
+            animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="block w-6 h-px bg-foreground"
+          />
+          <motion.span
+            animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            className="block w-6 h-px bg-foreground"
+          />
+          <motion.span
+            animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="block w-6 h-px bg-foreground"
+          />
+        </motion.button>
+      </nav>
+
+      {/* Mobile full-screen menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            className="fixed inset-0 bg-background/95 backdrop-blur-md flex flex-col items-center justify-center gap-10 z-40"
+            initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+            animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
+            exit={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 bg-background/97 backdrop-blur-md flex flex-col items-center justify-center gap-10 z-40"
           >
             {navItems.map((item, i) => (
               <motion.a
                 key={item.label}
                 href={item.href}
                 onClick={() => setIsOpen(false)}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{
+                  delay: 0.1 + i * 0.08,
+                  duration: 0.5,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
                 className="font-serif italic text-4xl text-foreground hover:text-primary transition-colors duration-500"
               >
                 {item.label}
@@ -90,7 +123,7 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </div>
   );
 };
 
