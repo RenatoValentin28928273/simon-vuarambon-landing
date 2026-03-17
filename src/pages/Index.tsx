@@ -19,9 +19,7 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <SectionDivider />
-      <ScrollReveal speed={0.12}>
-        <TourSection />
-      </ScrollReveal>
+      <TourSection />
       <ScrollReveal speed={0.06}>
         <MarqueeSection />
       </ScrollReveal>
