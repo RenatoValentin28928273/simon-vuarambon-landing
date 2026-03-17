@@ -88,7 +88,10 @@ const PresskitSection = () => {
                   key={pk.title}
                   variants={item}
                   onClick={() => handleDownload(pk.filename)}
-                  className="group w-full text-left glass-card rounded-sm p-6 md:p-8 flex items-start gap-6 hover:border-primary/20 transition-all duration-500 cursor-pointer"
+                  whileHover={{ y: -6, x: 4, scale: 1.01 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 320, damping: 22 }}
+                  className="group w-full text-left glass-card rounded-sm p-6 md:p-8 flex items-start gap-6 hover:border-primary/20 transition-colors duration-500 cursor-pointer"
                 >
                   <div className="shrink-0 w-10 h-10 flex items-center justify-center border border-foreground/10 rounded-sm group-hover:border-primary/40 group-hover:text-primary transition-colors duration-500">
                     <pk.icon className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors duration-500" />
