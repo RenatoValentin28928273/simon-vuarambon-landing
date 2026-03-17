@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import releaseCover from "@/assets/release-cover.jpg";
 import InteractiveBackground from "@/components/InteractiveBackground";
+import AnimatedHeading from "@/components/AnimatedHeading";
 
 const releases = [
   { title: "The Night Mail (Simon Vuarambon Remix)", artist: "New Jackson", label: "Bedrock Records", year: "2026" },
