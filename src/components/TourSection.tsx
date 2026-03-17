@@ -213,7 +213,7 @@ const TourSection = () => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  className="glass-card rounded-[10px] border border-white/10 outline outline-1 outline-white/[0.06] p-8 flex flex-col gap-4 min-w-[260px]"
+                  className="glass-card rounded-[10px] border border-white/10 outline outline-1 outline-white/[0.06] p-8 flex flex-col gap-4 w-[380px]"
                 >
                   <span className="font-mono text-xs tracking-[0.3em] uppercase text-primary">
                     {active.date}
