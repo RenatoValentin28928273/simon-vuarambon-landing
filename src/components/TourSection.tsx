@@ -116,7 +116,7 @@ const TourSection = () => {
   return (
     <>
       {/* ── Mobile: simple list (no scroll-hijack) ── */}
-      <section id="tour" className="relative md:hidden py-[12vh] px-6">
+      <section id="tour" className="relative md:hidden py-[12vh] px-6 overflow-hidden">
         <SmokeBackground />
         <div className="container mx-auto max-w-5xl">
           <div className="flex items-baseline justify-between mb-10">
@@ -172,7 +172,6 @@ const TourSection = () => {
       <div ref={outerRef} style={{ height: `${tourDates.length * 100}vh` }} className="hidden md:block">
         <section
           className="sticky top-0 h-screen flex flex-col justify-center px-12 overflow-hidden pb-[14vh]"
-          style={{ position: "sticky" }}
         >
           <SmokeBackground />
           <div className="container mx-auto max-w-5xl">
