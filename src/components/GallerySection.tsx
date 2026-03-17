@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 import AnimatedHeading from "@/components/AnimatedHeading";
 
 import gallery1 from "@/assets/gallery-1.jpg";
@@ -34,11 +35,12 @@ const GallerySection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true,
-    align: "center",
-    skipSnaps: false,
-  });
+  const autoplay = useRef(Autoplay({ delay: 3500, stopOnInteraction: false }));
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: true, align: "center", skipSnaps: false },
+    [autoplay.current]
+  );
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -106,7 +108,12 @@ const GallerySection = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div ref={emblaRef} className="overflow-hidden">
+        <div
+          ref={emblaRef}
+          className="overflow-hidden"
+          onMouseEnter={() => autoplay.current.stop()}
+          onMouseLeave={() => autoplay.current.play()}
+        >
           <div className="flex gap-4 md:gap-6">
             {media.map((item, i) => {
               const isActive = i === selectedIndex;
