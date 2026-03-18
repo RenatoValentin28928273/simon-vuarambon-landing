@@ -42,7 +42,7 @@ const Typewriter = () => {
       <span>{displayed}</span>
       <motion.span
         animate={{ opacity: [1, 0] }}
-        transition={{ duration: 0.75, repeat: Infinity, repeatType: "reverse", ease: "steps(1)" }}
+        transition={{ duration: 0.75, repeat: Infinity, repeatType: "reverse", ease: "linear", times: [0, 1] }}
         className="inline-block w-px h-[1em] bg-muted-foreground align-middle"
       />
     </span>
